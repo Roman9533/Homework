@@ -51,3 +51,19 @@ const students = [
 
     const passingStudents = getPassingStudents(students, 100);
     console.log(passingStudents);
+    
+function changeText() {
+    document.getElementById("text-element").textContent = "Текст был изменен!";
+}
+
+function addText() {
+    const p = document.getElementById("text-element");
+    p.textContent += " (дополнено)";
+}
+
+function resetText() {
+    document.getElementById("text-element").textContent = originalText;
+}
+
+let originalText = "Исходный текст этого параграфа";
+
