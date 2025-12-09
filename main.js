@@ -67,3 +67,121 @@ function resetText() {
 
 let originalText = "Исходный текст этого параграфа";
 
+function safeOutput() {
+    const input = document.getElementById("user-input").value;
+    document.getElementById("safe-output").textContent = "Безопасная зона: " + input;
+}
+
+function unsafeOutput() {
+    const input = document.getElementById("user-input").value;
+    document.getElementById("unsafe-output").innerHTML = "Небезопасная зона: " + input;
+}
+//////////////////
+function addSimpleContent() {
+    const container = document.getElementById("dynamic-content");
+    const p = document.createElement("p");
+    p.textContent = "Новый текстовый блок";
+    container.appendChild(p);
+}
+
+function addHTMLContent() {
+    const container = document.getElementById("dynamic-content");
+
+    const block = document.createElement("div");
+    block.innerHTML = `
+        <h3>Заголовок блока</h3>
+        <p>Это динамически добавленный HTML-контент</p>
+        <ul>
+            <li>Элемент 1</li>
+            <li>Элемент 2</li>
+            <li>Элемент 3</li>
+        </ul>
+    `;
+    container.appendChild(block);
+}
+
+function clearContent() {
+    document.getElementById("dynamic-content").innerHTML = "";
+}
+//////////////////////////
+
+const styleDemo = document.getElementById("style-demo");
+
+const originalStyles = {
+    background: styleDemo.style.background,
+    width: styleDemo.style.width,
+    height: styleDemo.style.height,
+    borderRadius: styleDemo.style.borderRadius,
+    boxShadow: styleDemo.style.boxShadow
+};
+
+function changeColor() {
+    styleDemo.style.background = "lightblue";
+}
+
+function changeSize() {
+    styleDemo.style.width = "300px";
+    styleDemo.style.height = "100px";
+}
+
+function addBorder() {
+    styleDemo.style.borderRadius = "10px";
+    styleDemo.style.boxShadow = "0 0 10px rgba(0,0,0,0.3)";
+}
+
+function resetStyles() {
+    styleDemo.style.background = originalStyles.background;
+    styleDemo.style.width = originalStyles.width;
+    styleDemo.style.height = originalStyles.height;
+    styleDemo.style.borderRadius = originalStyles.borderRadius;
+    styleDemo.style.boxShadow = originalStyles.boxShadow;
+}
+//////////////////////////////
+
+const defaultProfile = {
+    name: "Иван Иванов",
+    title: "Студент",
+    bio: "Люблю изучать JavaScript"
+};
+
+function updateName() {
+    const value = document.getElementById("name-input").value;
+    if (value.trim() !== "") {
+        document.getElementById("user-name").textContent = value;
+    }
+}
+
+function updateTitle() {
+    const value = document.getElementById("title-input").value;
+    if (value.trim() !== "") {
+        document.getElementById("user-title").textContent = value;
+    }
+}
+
+function updateBio() {
+    const value = document.getElementById("bio-input").value;
+    if (value.trim() !== "") {
+        document.getElementById("user-bio").textContent = value;
+    }
+}
+
+function highlightProfile() {
+    const profile = document.getElementById("user-profile");
+    profile.style.border = "2px solid blue";
+    profile.style.padding = "10px";
+    profile.style.background = "rgba(173, 216, 230, 0.3)";
+    profile.style.borderRadius = "10px";
+}
+
+function resetProfile() {
+    const profile = document.getElementById("user-profile");
+
+    document.getElementById("user-name").textContent = defaultProfile.name;
+    document.getElementById("user-title").textContent = defaultProfile.title;
+    document.getElementById("user-bio").textContent = defaultProfile.bio;
+
+    profile.style.border = "";
+    profile.style.padding = "";
+    profile.style.background = "";
+    profile.style.borderRadius = "";
+}
