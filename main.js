@@ -185,3 +185,158 @@ function resetProfile() {
     profile.style.background = "";
     profile.style.borderRadius = "";
 }
+
+
+let photos = [];
+const likes = new Map();
+const tagsMap = new Map();
+
+
+const gallery = document.getElementById("gallery");
+
+const searchTitle = document.getElementById("search-title");
+const yearFilter = document.getElementById("year-filter");
+const tagsList = document.getElementById("tags-list");
+
+
+const addPopup = document.getElementById("add-popup");
+const viewPopup = document.getElementById("view-popup");
+
+
+const addForm = document.getElementById("add-photo-form");
+
+
+document.getElementById("open-add-form").addEventListener("click", () => {
+  addPopup.classList.remove("hidden");
+});
+document.getElementById("close-add").addEventListener("click", () => {
+  addPopup.classList.add("hidden");
+});
+document.getElementById("close-view").addEventListener("click", () => {
+  viewPopup.classList.add("hidden");
+});
+
+
+addForm.addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const url = document.getElementById("photo-url").value.trim();
+  const title = document.getElementById("photo-title").value.trim();
+  const location = document.getElementById("photo-location").value.trim();
+  const year = document.getElementById("photo-year").value;
+  const tagsInput = document.getElementById("photo-tags").value;
+  const desc = document.getElementById("photo-description").value.trim();
+
+ 
+  const tags = tagsInput
+    .split(",")
+    .map((t) => t.trim().toLowerCase())
+    .filter(Boolean);
+
+ 
+  const photo = { url, title, location, year, tags, desc };
+  photos.push(photo);
+
+  
+  likes.set(url, 0);
+
+  
+  tags.forEach((tag) => {
+    if (!tagsMap.has(tag)) tagsMap.set(tag, new Set());
+    tagsMap.get(tag).add(url);
+  });
+
+
+  updateYearFilter();
+  updateTags();
+  renderGallery();
+
+  addPopup.classList.add("hidden");
+  addForm.reset();
+});
+
+
+function updateYearFilter() {
+  const years = [...new Set(photos.map((p) => p.year))].sort();
+  yearFilter.innerHTML = `<option value="all">Все годы</option>` +
+    years.map((y) => `<option value="${y}">${y}</option>`).join("");
+}
+
+
+function updateTags() {
+  const allTags = [...tagsMap.keys()].sort();
+  tagsList.innerHTML = allTags.map((tag) => `<li data-tag="${tag}">${tag}</li>`).join("");
+
+  document.querySelectorAll("#tags-list li").forEach((li) => {
+    li.addEventListener("click", () => {
+      document.querySelectorAll("#tags-list li").forEach(el =>
+        el.classList.remove("active")
+      );
+      li.classList.add("active");
+      renderGallery();
+    });
+  });
+}
+
+
+function renderGallery() {
+  gallery.innerHTML = "";
+
+  const text = searchTitle.value.toLowerCase();
+  const year = yearFilter.value;
+  const activeTag = document.querySelector("#tags-list .active")?.dataset.tag;
+
+  photos.forEach((photo) => {
+    if (text && !photo.title.toLowerCase().includes(text)) return;
+    if (year !== "all" && photo.year !== year) return;
+    if (activeTag && !photo.tags.includes(activeTag)) return;
+
+    const card = document.createElement("div");
+    card.className = "photo-card";
+    card.innerHTML = `
+      <img src="${photo.url}" alt="${photo.title}">
+      <h4>${photo.title}</h4>
+      <small>${photo.year}</small>
+    `;
+    card.addEventListener("click", () => openViewPhoto(photo));
+    gallery.append(card);
+  });
+}
+
+
+function openViewPhoto(photo) {
+  document.getElementById("popup-image").src = photo.url;
+  document.getElementById("popup-title").textContent = photo.title;
+  document.getElementById("popup-location").textContent = photo.location;
+  document.getElementById("popup-year").textContent = photo.year;
+  document.getElementById("popup-description").textContent = photo.desc;
+
+  const tagsContainer = document.getElementById("popup-tags");
+  tagsContainer.innerHTML = photo.tags.map(t => `<span class="tag">${t}</span>`).join("");
+
+ 
+  document.getElementById("popup-like-count").textContent = likes.get(photo.url);
+
+  const likeBtn = document.getElementById("popup-like");
+  likeBtn.onclick = () => {
+    likes.set(photo.url, likes.get(photo.url) + 1);
+    document.getElementById("popup-like-count").textContent = likes.get(photo.url);
+  };
+
+  viewPopup.classList.remove("hidden");
+}
+
+
+searchTitle.addEventListener("input", () => {
+  document.querySelectorAll("#tags-list li").forEach((li) =>
+    li.classList.remove("active")
+  );
+  renderGallery();
+});
+
+yearFilter.addEventListener("change", () => {
+  document.querySelectorAll("#tags-list li").forEach((li) =>
+    li.classList.remove("active")
+  );
+  renderGallery();
+});

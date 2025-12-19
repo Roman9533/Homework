@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Мой фотоальбом</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="task1">
@@ -56,6 +57,86 @@
     <button onclick="highlightProfile()">Подсветить профиль</button>
     <button onclick="resetProfile()">Сбросить профиль</button>
 </div>
+ <!-- Меню -->
+  <header class="app-header">
+    <h1>Мой фотоальбом</h1>
+    <div class="header-controls">
+      <input type="text" id="search-title" placeholder="Поиск по названию..." />
+      <select id="year-filter">
+        <option value="all">Все годы</option>
+      </select>
+      <button id="open-add-form" class="btn btn-primary">Добавить фото</button>
+    </div>
+  </header>
+
+  <!-- Основной контент -->
+  <main class="container">
+    <div class="sidebar">
+      <h3>Теги</h3>
+      <ul id="tags-list"></ul>
+    </div>
+    <div class="gallery" id="gallery">
+      
+    </div>
+  </main>
+
+  <!-- Popup: Добавление фото -->
+  <div id="add-popup" class="popup hidden">
+    <div class="popup-content">
+      <div class="popup-header">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234361ee'%3E%3Cpath d='M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 12h-2v-2h2v2zm0-4h-2V9h2v4zm-4 4H8v-2h2v2zm0-4H8V9h2v4z'/%3E%3C/svg%3E" alt="Добавить фото" />
+        <h2>Добавить новое фото</h2>
+        <span class="popup-close" id="close-add">&times;</span>
+      </div>
+      <form id="add-photo-form">
+        <div class="form-group">
+          <label>Ссылка на изображение*</label>
+          <input type="url" id="photo-url" required placeholder="https://example.com/photo.jpg" />
+        </div>
+        <div class="form-group">
+          <label>Название*</label>
+          <input type="text" id="photo-title" required placeholder="Закат на море" />
+        </div>
+        <div class="form-group">
+          <label>Место съёмки</label>
+          <input type="text" id="photo-location" placeholder="Крым, Ялта" />
+        </div>
+        <div class="form-group">
+          <label>Год*</label>
+          <input type="number" id="photo-year" min="1900" max="2030" required placeholder="2025" />
+        </div>
+        <div class="form-group">
+          <label>Теги (через запятую)</label>
+          <input type="text" id="photo-tags" placeholder="море, закат, лето" />
+        </div>
+        <div class="form-group">
+          <label>Описание</label>
+          <textarea id="photo-description" placeholder="Расскажите, что происходило на фото..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary full-width">Добавить фото</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Popup: Просмотр фото -->
+  <div id="view-popup" class="popup hidden">
+    <div class="popup-content view-mode">
+      <span class="popup-close" id="close-view">&times;</span>
+      <div class="view-content">
+        <div class="view-image">
+          <img id="popup-image" src="" alt="" />
+        </div>
+        <div class="view-details">
+          <h2 id="popup-title"></h2>
+          <p id="popup-location" class="location"></p>
+          <p id="popup-year" class="year-tag"></p>
+          <div id="popup-tags" class="tags-container"></div>
+          <p id="popup-description"></p>
+          <button id="popup-like" class="like-btn small">❤️ <span id="popup-like-count">0</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
 
     <script src="main.js"></script>
 </body>
